@@ -1,18 +1,18 @@
 {%- comment -%}
-  Secondary Navigation snippet — embedded directly inside header.liquid
-  so it inherits Dawn's own sticky-header behavior instead of fighting it
-  as an independent sibling section.
+    Secondary Navigation snippet — embedded directly inside header.liquid
+    so it inherits Dawn's own sticky-header behavior instead of fighting it
+    as an independent sibling section.
 
-  Call from header.liquid like:
-  {% render 'secondary-navigation_1',
-    id_menu: section.settings.id_menu,
-    id_bg_color: section.settings.id_bg_color,
-    id_alignment: section.settings.id_alignment
-  %}
+    Call from header.liquid like:
+    {% render 'secondary-navigation_1',
+        id_menu: section.settings.id_menu,
+        id_bg_color: section.settings.id_bg_color,
+        id_alignment: section.settings.id_alignment
+    %}
 
-  The three schema settings (id_menu, id_bg_color, id_alignment) live in
-  header.liquid's own { % schema % } block, not here — snippets can't have
-  their own schema.
+    The three schema settings (id_menu, id_bg_color, id_alignment) live in
+    header.liquid's own { % schema % } block, not here — snippets can't have
+    their own schema.
 {%- endcomment -%}
 
 {% style %}
