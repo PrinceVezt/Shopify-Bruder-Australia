@@ -1,0 +1,510 @@
+{%- comment -%}
+  Dealer Locations page template — Metaobjects version.
+  Requires a "Dealer" metaobject definition (handle: dealer) with fields:
+    name (single line text), address (single line text), phone (single line text),
+    coordinates (single line text, "lat, lng" format), dealer_type (single line text)
+
+  Assign this template to a Page in Shopify Admin:
+  Online Store -> Pages -> Add page (or edit existing) -> Theme template -> page.dealer-locations-metaobjects
+{%- endcomment -%}
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+
+<div class="dealer-locator">
+  <div class="dealer-locator__hero">
+    <h1 class="dealer-locator__title">Dealer Locations</h1>
+    <p class="dealer-locator__subtitle">Find your nearest authorised Brüder dealer for compressors, parts and support.</p>
+  </div>
+
+  <div class="dealer-locator__stage">
+    <div id="dealer-map" class="dealer-locator__map"></div>
+
+    <div class="dealer-locator__panel">
+      <div class="dealer-locator__panel-header">
+        <p id="dealer-count" class="dealer-locator__count"></p>
+        <div class="dealer-locator__search-wrap">
+          <input
+            type="text"
+            id="dealer-search"
+            class="dealer-locator__search"
+            placeholder="Search by suburb, postcode, or dealer name"
+            autocomplete="off"
+          >
+        </div>
+        <button type="button" id="dealer-locate-btn" class="dealer-locator__locate-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          Use my location
+        </button>
+        <p id="dealer-status" class="dealer-locator__status" role="status"></p>
+      </div>
+
+      <div id="dealer-list" class="dealer-locator__list"></div>
+    </div>
+  </div>
+
+  <noscript>
+    <p>Enable JavaScript to view the dealer map and search. You can also <a href="/pages/contact-us">contact us</a> directly for dealer information.</p>
+  </noscript>
+</div>
+
+<style>
+  .dealer-locator {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding-bottom: 4rem;
+  }
+
+  .dealer-locator__hero {
+    background: #ffcd03;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .dealer-locator__title {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 900;
+    color: #000;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .dealer-locator__subtitle {
+    font-size: 1.05rem;
+    color: #000;
+    margin: 0;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  /* Stage: full-bleed map with a floating panel on top, DEWALT-locator style */
+  .dealer-locator__stage {
+    position: relative;
+    width: 100%;
+    height: 680px;
+    isolation: isolate; /* traps Leaflet's internal z-index so it can never climb above the sticky nav */
+  }
+
+  .dealer-locator__map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #ede8df;
+  }
+
+  .dealer-locator__panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    width: 400px;
+    max-width: calc(100% - 40px);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .dealer-locator__panel-header {
+    padding: 1.1rem 1.1rem 0.9rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  .dealer-locator__count {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .dealer-locator__search {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d1d1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+
+  .dealer-locator__search:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  .dealer-locator__locate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .dealer-locator__locate-btn:hover {
+    background: #222;
+  }
+
+  .dealer-locator__locate-btn:focus-visible {
+    outline: 2px solid #ffcd03;
+    outline-offset: 2px;
+  }
+
+  .dealer-locator__locate-btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .dealer-locator__status {
+    min-height: 1.1rem;
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0;
+  }
+
+  .dealer-locator__list {
+    overflow-y: auto;
+    padding: 0.9rem 1.1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    flex: 1;
+  }
+
+  .dealer-card {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  .dealer-card__badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    margin-bottom: 0.55rem;
+  }
+
+  .dealer-card__badge--compressor {
+    background: #000;
+    color: #ffcd03;
+  }
+
+  .dealer-card__badge--accessories {
+    background: #ede8df;
+    color: #000;
+  }
+
+  .dealer-card__name {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+  }
+
+  .dealer-card__address {
+    font-size: 0.87rem;
+    color: #444;
+    margin: 0 0 0.45rem;
+    line-height: 1.4;
+  }
+
+  .dealer-card__phone {
+    font-size: 0.87rem;
+    margin: 0 0 0.45rem;
+  }
+
+  .dealer-card__phone a {
+    color: #000;
+  }
+
+  .dealer-card__distance {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 0.5rem;
+  }
+
+  .dealer-card__directions {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .dealer-locator__empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 749px) {
+    .dealer-locator__stage {
+      height: auto;
+      isolation: auto;
+    }
+    .dealer-locator__map {
+      position: relative;
+      height: 320px;
+      isolation: isolate;
+    }
+    .dealer-locator__panel {
+      position: relative;
+      top: auto;
+      left: auto;
+      bottom: auto;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      border-top: 1px solid #eee;
+    }
+    .dealer-locator__list {
+      overflow-y: visible;
+    }
+  }
+</style>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+
+<script>
+(function () {
+  {%- comment -%}
+    Metaobject loop, wrapped in {% paginate %} to bypass the default 50-entry limit.
+    250 is Shopify's max page size for this tag. If you ever exceed 250 dealers,
+    this will need proper multi-page pagination handling — unlikely for a while.
+  {%- endcomment -%}
+  var dealersRaw = [
+    {%- paginate shop.metaobjects.dealer.values by 250 -%}
+    {%- for dealer in shop.metaobjects.dealer.values -%}
+      {
+        name: {{ dealer.name.value | json }},
+        address: {{ dealer.address.value | json }},
+        phone: {{ dealer.phone.value | json }},
+        coordinates: {{ dealer.coordinates.value | json }},
+        type: {{ dealer.dealer_type.value | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+    {%- endpaginate -%}
+  ];
+
+  function parseCoordinates(str) {
+    if (!str) return { lat: NaN, lng: NaN };
+    var parts = str.split(',').map(function (s) { return parseFloat(s.trim()); });
+    return { lat: parts[0], lng: parts[1] };
+  }
+
+  var dealers = dealersRaw.map(function (d, i) {
+    var coords = parseCoordinates(d.coordinates);
+    d.lat = coords.lat;
+    d.lng = coords.lng;
+    d._id = 'dealer-' + i;
+    d._distanceKm = null;
+    return d;
+  });
+
+  var searchInput = document.getElementById('dealer-search');
+  var locateBtn = document.getElementById('dealer-locate-btn');
+  var statusEl = document.getElementById('dealer-status');
+  var countEl = document.getElementById('dealer-count');
+  var listEl = document.getElementById('dealer-list');
+  var markers = {};
+
+  // Panel width (400px) + its 20px left offset + a little breathing room.
+  // Passed to Leaflet's asymmetric fitBounds padding so the visible map area
+  // is biased center-right instead of being covered by the floating panel.
+  var PANEL_OFFSET = 440;
+
+  function isMobile() {
+    return window.matchMedia('(max-width: 749px)').matches;
+  }
+
+  function fitBoundsAvoidingPanel(bounds, options) {
+    options = options || {};
+    if (isMobile()) {
+      map.fitBounds(bounds, { padding: [20, 20], maxZoom: options.maxZoom || 9 });
+    } else {
+      map.fitBounds(bounds, {
+        paddingTopLeft: [PANEL_OFFSET, 30],
+        paddingBottomRight: [30, 30],
+        maxZoom: options.maxZoom || 9
+      });
+    }
+  }
+
+  var map = L.map('dealer-map', { scrollWheelZoom: false });
+
+  // Default view: Australia, biased center-right so it isn't hidden behind the panel.
+  var AUSTRALIA_BOUNDS = [[-43.6, 112.9], [-10.5, 153.6]];
+  fitBoundsAvoidingPanel(AUSTRALIA_BOUNDS, { maxZoom: 5 });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function buildMarkers() {
+    dealers.forEach(function (d) {
+      if (typeof d.lat !== 'number' || typeof d.lng !== 'number' || isNaN(d.lat) || isNaN(d.lng)) {
+        return; // skip entries with missing/bad coordinates rather than crash the map
+      }
+      var marker = L.marker([d.lat, d.lng]).bindPopup(
+        '<strong>' + d.name + '</strong><br>' + d.address
+      );
+      markers[d._id] = marker;
+    });
+  }
+
+  function matchesQuery(dealer, query) {
+    if (!query) return true;
+    var haystack = (dealer.name + ' ' + dealer.address).toLowerCase();
+    return haystack.indexOf(query.toLowerCase()) !== -1;
+  }
+
+  function renderList(filtered) {
+    listEl.innerHTML = '';
+    countEl.textContent = filtered.length + (filtered.length === 1 ? ' Result' : ' Results');
+
+    Object.keys(markers).forEach(function (id) { map.removeLayer(markers[id]); });
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div class="dealer-locator__empty">No dealers match that search. Try a nearby suburb or postcode, or <a href="/pages/contact-us">contact us</a> directly.</div>';
+      return;
+    }
+
+    var bounds = [];
+    filtered.forEach(function (d) {
+      if (markers[d._id]) {
+        markers[d._id].addTo(map);
+        bounds.push([d.lat, d.lng]);
+      }
+
+      var card = document.createElement('div');
+      card.className = 'dealer-card';
+
+      var badgeClass = d.type.toLowerCase().indexOf('compressor') !== -1
+        ? 'dealer-card__badge--compressor'
+        : 'dealer-card__badge--accessories';
+      var badgeLabel = d.type;
+      var distanceHtml = (d._distanceKm !== null)
+        ? '<p class="dealer-card__distance">' + d._distanceKm.toFixed(1) + ' km away</p>'
+        : '';
+
+      card.innerHTML =
+        '<span class="dealer-card__badge ' + badgeClass + '">' + badgeLabel + '</span>' +
+        '<h3 class="dealer-card__name">' + d.name + '</h3>' +
+        '<p class="dealer-card__address">' + d.address + '</p>' +
+        '<p class="dealer-card__phone"><a href="tel:' + d.phone.replace(/\s+/g, '') + '">' + d.phone + '</a></p>' +
+        distanceHtml +
+        '<a class="dealer-card__directions" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(d.address) + '">Directions</a>';
+
+      listEl.appendChild(card);
+    });
+
+    if (bounds.length > 0 && !userLocated) {
+      fitBoundsAvoidingPanel(bounds, { maxZoom: 9 });
+    }
+  }
+
+  function applyFilterAndRender() {
+    var query = searchInput.value.trim();
+    var filtered = dealers.filter(function (d) { return matchesQuery(d, query); });
+    if (userLocated) {
+      filtered.sort(function (a, b) {
+        return (a._distanceKm || 999999) - (b._distanceKm || 999999);
+      });
+    }
+    renderList(filtered);
+  }
+
+  var userLocated = false;
+
+  searchInput.addEventListener('input', applyFilterAndRender);
+
+  locateBtn.addEventListener('click', function () {
+    if (!navigator.geolocation) {
+      statusEl.textContent = 'Location services are not available in this browser.';
+      return;
+    }
+    locateBtn.disabled = true;
+    statusEl.textContent = 'Finding your location…';
+
+    navigator.geolocation.getCurrentPosition(
+      function (pos) {
+        var userLat = pos.coords.latitude;
+        var userLng = pos.coords.longitude;
+        dealers.forEach(function (d) {
+          d._distanceKm = haversineKm(userLat, userLng, d.lat, d.lng);
+        });
+        userLocated = true;
+        statusEl.textContent = 'Showing dealers nearest to you.';
+        locateBtn.disabled = false;
+
+        L.circleMarker([userLat, userLng], {
+          radius: 8, color: '#000', fillColor: '#ffcd03', fillOpacity: 1, weight: 2
+        }).addTo(map).bindPopup('Your location');
+
+        var pad = 0.5; // small bbox around the user point so fitBounds has something to frame
+        fitBoundsAvoidingPanel([
+          [userLat - pad, userLng - pad],
+          [userLat + pad, userLng + pad]
+        ], { maxZoom: 10 });
+
+        applyFilterAndRender();
+      },
+      function () {
+        statusEl.textContent = 'Could not get your location. You can still search by suburb or postcode above.';
+        locateBtn.disabled = false;
+      }
+    );
+  });
+
+  if (dealers.length === 0) {
+    statusEl.textContent = 'No dealers have been added yet in Shopify Admin under Content -> Metaobjects -> Dealer.';
+  }
+
+  buildMarkers();
+  applyFilterAndRender();
+})();
+</script>
