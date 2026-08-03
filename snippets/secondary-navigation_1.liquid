@@ -16,74 +16,74 @@
 {%- endcomment -%}
 
 {% style %}
-  .secondary-nav-embedded {
-    background-color: {{ id_bg_color }};
-    width: 100%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  }
+    .secondary-nav-embedded {
+        background-color: {{ id_bg_color }};
+        width: 100%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
 
-  .secondary-nav-embedded .secondary-nav__inner {
-    display: flex;
-    justify-content: {{ id_alignment }};
-    max-width: 1200px;
-    margin: 0 auto;
-    /* padding: 0.9rem 2rem; */
-    padding: 1.5rem 2rem;
-  }
-
-  .secondary-nav-embedded ul {
-    display: flex;
-    align-items: center;
-    gap: 2.25rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap;
-  }
-
-  .secondary-nav-embedded a {
-    text-decoration: none;
-    color: #000;
-    font-weight: 600;
-    font-size: 1.5rem;
-    letter-spacing: 0;
-    white-space: nowrap;
-    text-transform: uppercase;
-  }
-
-  .secondary-nav-embedded a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .secondary-nav-embedded a[aria-current="page"] {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  @media (max-width: 749px) {
     .secondary-nav-embedded .secondary-nav__inner {
-      justify-content: flex-start;
-      overflow-x: auto;
-      padding: 0.8rem 1.25rem;
+        display: flex;
+        justify-content: {{ id_alignment }};
+        max-width: 1200px;
+        margin: 0 auto;
+        /* padding: 0.9rem 2rem; */
+        padding: 1.5rem 2rem;
     }
+
     .secondary-nav-embedded ul {
-      flex-wrap: nowrap;
-      gap: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 2.25rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap;
     }
-  }
+
+    .secondary-nav-embedded a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 600;
+        font-size: 1.5rem;
+        letter-spacing: 0;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+
+    .secondary-nav-embedded a:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .secondary-nav-embedded a[aria-current="page"] {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    @media (max-width: 749px) {
+        .secondary-nav-embedded .secondary-nav__inner {
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding: 0.8rem 1.25rem;
+        }
+        .secondary-nav-embedded ul {
+            flex-wrap: nowrap;
+            gap: 1.5rem;
+        }
+    }
 {% endstyle %}
 
 <nav class="secondary-nav-embedded" aria-label="Secondary">
-  <div class="secondary-nav__inner">
-    <ul>
-      {%- for link in id_menu.links -%}
-        <li>
-          <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>
-            {{ link.title }}
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
-  </div>
+    <div class="secondary-nav__inner">
+        <ul>
+            {%- for link in id_menu.links -%}
+                <li>
+                    <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>
+                        {{ link.title }}
+                    </a>
+                </li>
+            {%- endfor -%}
+        </ul>
+    </div>
 </nav>
