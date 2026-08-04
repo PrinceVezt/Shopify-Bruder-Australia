@@ -29,12 +29,12 @@
 
   /* Hero */
   .hero {
-    background: var(--yellow);
+    /* background: var(--yellow); */
     padding: 3rem 2rem;
     text-align: center;
   }
 
-  .hero h1 {
+  .intro h1 {
     margin: 0;
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
@@ -304,15 +304,16 @@
 </head>
 <body>
 
-  <section class="hero">
+  {% comment %} <section class="hero">
     <h1>Contact us</h1>
-  </section>
+  </section> {% endcomment %}
 
   <main class="wrap">
 
     <section class="intro">
-      <h2>Speak to the right people</h2>
-      <p>Whether you're chasing pricing, technical advice, dealer support, or parts — we'll point you in the right direction quickly.</p>
+        <h1 style="text-align: center;">Contact us</h1>
+        <h2>Speak to the right people</h2>
+        <p>Whether you're chasing pricing, technical advice, dealer support, or parts — we'll point you in the right direction quickly.</p>
     </section>
 
     <section class="two-col">
@@ -410,7 +411,7 @@
     </section>
 
     <section class="trust-banner">
-      <p class="main-line">Trusted by farmers, hire companies and mining operations across Australia.</p>
+      <p class="main-line">We are Trusted by Farmers, Hire Companies and Mining Operations across Australia.</p>
       <p class="sub-line">We build equipment for people who depend on it. The same applies to our support.</p>
     </section>
 
@@ -420,13 +421,13 @@
       <a href="/pages/dealer-locations" class="btn">Find a dealer</a>
     </section>
 
-    <section class="placeholder">
+    {% comment %} <section class="placeholder">
       In News and Insights — design pending
-    </section>
+    </section> {% endcomment %}
 
-    <section class="placeholder">
+    {% comment %} <section class="placeholder">
       From the Field (testimonials) — design pending
-    </section>
+    </section> {% endcomment %}
 
     <div class="page-footer-space"></div>
 
