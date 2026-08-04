@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Brüder Kompressor (Prototype)</title>
+<style>
+  :root {
+    --yellow: #ffcd03;
+    --black: #000000;
+    --cream: #ede8df;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color: var(--black);
+    line-height: 1.5;
+    /* background: var(--cream); */
+  }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* Hero */
+  .hero {
+    background: var(--yellow);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Intro heading */
+  .intro {
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem 2rem;
+    margin: 2rem auto 0;
+  }
+
+  .intro h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .intro p {
+    margin: 0;
+    color: #444;
+    font-size: 1rem;
+  }
+
+  /* Two-column base */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.75rem;
+  }
+
+  /* Contact info list */
+  .info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .info-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .info-icon {
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top: 0.1rem;
+  }
+
+  .info-label {
+    font-size: 0.8rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0 0 0.15rem;
+  }
+
+  .info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .info-value a {
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .info-value a:hover {
+    text-decoration: underline;
+  }
+
+  /* Form */
+  .form-field {
+    margin-bottom: 1.1rem;
+  }
+
+  .form-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #d1d1d1;
+    border-radius: 0;
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+
+  .form-field textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus {
+    outline: 2px solid var(--black);
+    outline-offset: 1px;
+  }
+
+  .submit-btn {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 0;
+    padding: 0.85rem 1.8rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background: #e6b900;
+  }
+
+  /* Support lists (what happens next / when to contact) */
+  .support-list h3 {
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .support-list ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .support-list li {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  /* Trust banner */
+  .trust-banner {
+    background: var(--black);
+    border-radius: 0;
+    padding: 2.25rem 2rem;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+
+  .trust-banner .main-line {
+    color: var(--yellow);
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.4;
+    margin: 0 0 0.6rem;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .trust-banner .sub-line {
+    color: var(--cream);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* Dealer CTA */
+  .dealer-cta {
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+
+  .dealer-cta h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  .dealer-cta p {
+    margin: 0 0 1.2rem;
+    color: #444;
+  }
+
+  .dealer-cta a.btn {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0.8rem 1.8rem;
+    border-radius: 0;
+  }
+
+  .dealer-cta a.btn:hover {
+    background: #e6b900;
+  }
+
+  /* Placeholder sections (news + testimonials, to be designed later) */
+  .placeholder {
+    background: #fff;
+    border: 1px dashed #ccc;
+    border-radius: 0;
+    padding: 2rem;
+    text-align: center;
+    color: #999;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .page-footer-space {
+    height: 3rem;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 749px) {
+    .wrap {
+      padding: 0 1.25rem;
+    }
+
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .intro {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .intro h2 {
+      font-size: 1.3rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+
+    .trust-banner {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .trust-banner .main-line {
+      font-size: 1.1rem;
+    }
+
+    .dealer-cta {
+      padding: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>Contact us</h1>
+  </section>
+
+  <main class="wrap">
+
+    <section class="intro">
+      <h2>Speak to the right people</h2>
+      <p>Whether you're chasing pricing, technical advice, dealer support, or parts — we'll point you in the right direction quickly.</p>
+    </section>
+
+    <section class="two-col">
+      <div class="card">
+        <ul class="info-list">
+          <li>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div>
+              <p class="info-label">Phone</p>
+              <p class="info-value"><a href="tel:1300088990">1300 088 990</a></p>
+            </div>
+          </li>
+          <li>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            <div>
+              <p class="info-label">Email</p>
+              <p class="info-value"><a href="mailto:info@bruderaustralia.com.au">info@bruderaustralia.com.au</a></p>
+            </div>
+          </li>
+          <li>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <p class="info-label">Head office</p>
+              <p class="info-value">32 Secker Road, Mount Barker, South Australia 5251</p>
+            </div>
+          </li>
+          <li>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <div>
+              <p class="info-label">Operating hours</p>
+              <p class="info-value">Monday to Friday, 7:00AM to 5:00PM (not including public holidays)</p>
+            </div>
+          </li>
+          <li>
+            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6M9 19h4"/></svg>
+            <div>
+              <p class="info-label">ABN</p>
+              <p class="info-value">17 662 786 441</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <form onsubmit="event.preventDefault(); alert('Prototype only — form does not submit.');">
+          <div class="form-field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+          </div>
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+          </div>
+          <div class="form-field">
+            <label for="company">Company (optional)</label>
+            <input type="text" id="company" name="company" placeholder="Company">
+          </div>
+          <div class="form-field">
+            <label for="postcode">Postcode (optional)</label>
+            <input type="text" id="postcode" name="postcode" placeholder="Postcode">
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your phone number">
+          </div>
+          <div class="form-field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Message" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div class="card support-list">
+        <h3>What happens next?</h3>
+        <ul>
+          <li>We review your enquiry within business hours</li>
+          <li>The right person responds — not a call centre</li>
+          <li>If needed, we'll connect you with your nearest dealer</li>
+        </ul>
+      </div>
+
+      <div class="card support-list">
+        <h3>When to contact us directly</h3>
+        <ul>
+          <li>You're comparing compressor options</li>
+          <li>You need help specifying equipment</li>
+          <li>You're a hire company or mining operation</li>
+          <li>You want to discuss custom requirements</li>
+          <li>You're looking to become a dealer</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="trust-banner">
+      <p class="main-line">Trusted by farmers, hire companies and mining operations across Australia.</p>
+      <p class="sub-line">We build equipment for people who depend on it. The same applies to our support.</p>
+    </section>
+
+    <section class="dealer-cta">
+      <h3>Looking for a local dealer?</h3>
+      <p>Find your nearest authorised Brüder dealer here.</p>
+      <a href="/pages/dealer-locations" class="btn">Find a dealer</a>
+    </section>
+
+    <section class="placeholder">
+      In News and Insights — design pending
+    </section>
+
+    <section class="placeholder">
+      From the Field (testimonials) — design pending
+    </section>
+
+    <div class="page-footer-space"></div>
+
+  </main>
+
+</body>
+</html>
