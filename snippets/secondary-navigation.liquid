@@ -16,6 +16,14 @@
 {%- endcomment -%}
 
 {% style %}
+    @font-face {
+        font-family: 'Zuume Edge Black';
+        src: url('{{ "ZuumeEdge-Black.ttf" | asset_url }}') format('truetype');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+    }
+
     .secondary-nav-embedded {
         background-color: {{ id_bg_color }};
         width: 100%;
@@ -44,7 +52,7 @@
     .secondary-nav-embedded a {
         text-decoration: none;
         color: #000;
-        font-weight: 600;
+        /* font-weight: 600; */ font-family: 'Zuume Edge Black', sans-serif;
         font-size: 1.5rem;
         letter-spacing: 0;
         white-space: nowrap;
