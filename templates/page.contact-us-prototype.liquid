@@ -5,320 +5,320 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us — Brüder Kompressor (Prototype)</title>
 <style>
-  :root {
-    --yellow: #ffcd03;
-    --black: #000000;
-    --cream: #ede8df;
-  }
+    :root {
+        --yellow: #ffcd03;
+        --black: #000000;
+        --cream: #ede8df;
+    }
 
-  @font-face {
-    font-family: 'Zuume Edge Black';
-    src: url('{{ "ZuumeEdge-Black.ttf" | asset_url }}') format('truetype');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-  }
+    @font-face {
+        font-family: 'Zuume Edge Black';
+        src: url('{{ "ZuumeEdge-Black.ttf" | asset_url }}') format('truetype');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+    }
 
-  @font-face {
-    font-family: 'Zuume Edge Black';
-    src: url('{{ "ZuumeEdge-BlackItalic.ttf" | asset_url }}') format('truetype');
-    font-weight: 900;
-    font-style: italic;
-    font-display: swap;
-  }
+    @font-face {
+        font-family: 'Zuume Edge Black';
+        src: url('{{ "ZuumeEdge-BlackItalic.ttf" | asset_url }}') format('truetype');
+        font-weight: 900;
+        font-style: italic;
+        font-display: swap;
+    }
 
-  * { box-sizing: border-box; }
+    * { box-sizing: border-box; }
 
-  body {
-    margin: 0;
-    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; */
-    color: var(--black);
-    line-height: 1.5;
-    /* background: var(--cream); */
-  }
+    body {
+        margin: 0;
+        /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; */
+        color: var(--black);
+        line-height: 1.5;
+        /* background: var(--cream); */
+    }
 
-  .wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 32px;
-    margin-bottom: 70px;
-  }
-
-  /* Hero */
-  .hero {
-    /* background: var(--yellow); */
-    padding: 48px 32px;
-    text-align: center;
-  }
-
-  .intro h1 {
-    margin: 0;
-    font-size: clamp(32px, 5vw, 48px);
-    font-family: 'Zuume Edge Black', sans-serif;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* Intro heading */
-  .intro {
-    background: #fff;
-    border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 24px 32px;
-    margin: 32px auto 0;
-  }
-
-  .intro h2 {
-    margin: 0 0 6px;
-    font-size: 26px;
-    font-family: 'Zuume Edge Black', sans-serif;
-    font-weight: 800;
-  }
-
-  .intro p {
-    margin: 0;
-    color: #444;
-    font-size: 16px;
-  }
-
-  /* Two-column base */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 24px;
-  }
-
-  .card {
-    background: #fff;
-    border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 28px;
-  }
-
-  /* Contact info list */
-  .info-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .info-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .info-icon {
-    flex-shrink: 0;
-    width: 26px;
-    height: 26px;
-    margin-top: 2px;
-  }
-
-  .info-label {
-    font-size: 13px;
-    color: #777;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    margin: 0 0 2px;
-  }
-
-  .info-value {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-  }
-
-  .info-value a {
-    color: var(--black);
-    text-decoration: none;
-  }
-
-  .info-value a:hover {
-    text-decoration: underline;
-  }
-
-  /* Form */
-  .form-field {
-    margin-bottom: 18px;
-  }
-
-  .form-field label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-
-  .form-field input,
-  .form-field textarea {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #d1d1d1;
-    border-radius: 0;
-    font-size: 15px;
-    font-family: inherit;
-  }
-
-  .form-field textarea {
-    min-height: 110px;
-    resize: vertical;
-  }
-
-  .form-field input:focus,
-  .form-field textarea:focus {
-    outline: 2px solid var(--black);
-    outline-offset: 1px;
-  }
-
-  .submit-btn {
-    background: var(--yellow);
-    color: var(--black);
-    border: none;
-    border-radius: 0;
-    padding: 14px 29px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .submit-btn:hover {
-    background: #e6b900;
-  }
-
-  /* Support lists (what happens next / when to contact) */
-  .support-list h3 {
-    margin: 0 0 16px;
-    font-size: 18px;
-    font-weight: 800;
-  }
-
-  .support-list ul {
-    margin: 0;
-    padding-left: 19px;
-  }
-
-  .support-list li {
-    margin-bottom: 10px;
-    font-size: 15px;
-    color: #333;
-  }
-
-  /* Trust banner */
-  .trust-banner {
-    background: var(--black);
-    border-radius: 0;
-    padding: 36px 32px;
-    text-align: center;
-    margin-top: 24px;
-  }
-
-  .trust-banner .main-line {
-    color: var(--yellow);
-    font-size: 21px;
-    font-weight: 800;
-    line-height: 1.4;
-    margin: 0 0 10px;
-    max-width: 640px;
-    margin-inline: auto;
-  }
-
-  .trust-banner .sub-line {
-    color: var(--cream);
-    font-size: 15px;
-    margin: 0;
-  }
-
-  /* Dealer CTA */
-  .dealer-cta {
-    background: var(--cream);
-    border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 32px;
-    text-align: center;
-    margin-top: 24px;
-  }
-
-  .dealer-cta h3 {
-    margin: 0 0 8px;
-    font-size: 21px;
-    font-weight: 800;
-  }
-
-  .dealer-cta p {
-    margin: 0 0 19px;
-    color: #444;
-  }
-
-  .dealer-cta a.btn {
-    display: inline-block;
-    background: var(--yellow);
-    color: var(--black);
-    text-decoration: none;
-    font-weight: 700;
-    padding: 13px 29px;
-    border-radius: 0;
-  }
-
-  .dealer-cta a.btn:hover {
-    background: #e6b900;
-  }
-
-  /* Placeholder sections (news + testimonials, to be designed later) */
-  .placeholder {
-    background: #fff;
-    border: 1px dashed #ccc;
-    border-radius: 0;
-    padding: 32px;
-    text-align: center;
-    color: #999;
-    margin-top: 24px;
-    font-size: 14px;
-  }
-
-  .page-footer-space {
-    height: 48px;
-  }
-
-  /* Mobile responsive */
-  @media (max-width: 749px) {
     .wrap {
-      padding: 0 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 32px;
+        margin-bottom: 70px;
     }
 
-    .two-col {
-      grid-template-columns: 1fr;
+    /* Hero */
+    .hero {
+        /* background: var(--yellow); */
+        padding: 48px 32px;
+        text-align: center;
     }
 
+    .intro h1 {
+        margin: 0;
+        font-size: clamp(32px, 5vw, 48px);
+        font-family: 'Zuume Edge Black', sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Intro heading */
     .intro {
-      padding: 20px 24px;
+        background: #fff;
+        border-radius: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 24px 32px;
+        margin: 32px auto 0;
     }
 
     .intro h2 {
-      font-size: 21px;
+        margin: 0 0 6px;
+        font-size: 26px;
+        font-family: 'Zuume Edge Black', sans-serif;
+        font-weight: 800;
+    }
+
+    .intro p {
+        margin: 0;
+        color: #444;
+        font-size: 16px;
+    }
+
+    /* Two-column base */
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
     }
 
     .card {
-      padding: 20px;
+        background: #fff;
+        border-radius: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 28px;
     }
 
+    /* Contact info list */
+    .info-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .info-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .info-icon {
+        flex-shrink: 0;
+        width: 26px;
+        height: 26px;
+        margin-top: 2px;
+    }
+
+    .info-label {
+        font-size: 13px;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin: 0 0 2px;
+    }
+
+    .info-value {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .info-value a {
+        color: var(--black);
+        text-decoration: none;
+    }
+
+    .info-value a:hover {
+        text-decoration: underline;
+    }
+
+    /* Form */
+    .form-field {
+        margin-bottom: 18px;
+    }
+
+    .form-field label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .form-field input,
+    .form-field textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d1d1;
+        border-radius: 0;
+        font-size: 15px;
+        font-family: inherit;
+    }
+
+    .form-field textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus {
+        outline: 2px solid var(--black);
+        outline-offset: 1px;
+    }
+
+    .submit-btn {
+        background: var(--yellow);
+        color: var(--black);
+        border: none;
+        border-radius: 0;
+        padding: 14px 29px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #e6b900;
+    }
+
+    /* Support lists (what happens next / when to contact) */
+    .support-list h3 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .support-list ul {
+        margin: 0;
+        padding-left: 19px;
+    }
+
+    .support-list li {
+        margin-bottom: 10px;
+        font-size: 15px;
+        color: #333;
+    }
+
+    /* Trust banner */
     .trust-banner {
-      padding: 28px 20px;
+        background: var(--black);
+        border-radius: 0;
+        padding: 36px 32px;
+        text-align: center;
+        margin-top: 24px;
     }
 
     .trust-banner .main-line {
-      font-size: 18px;
+        color: var(--yellow);
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.4;
+        margin: 0 0 10px;
+        max-width: 640px;
+        margin-inline: auto;
     }
 
-    .dealer-cta {
-      padding: 24px;
+    .trust-banner .sub-line {
+        color: var(--cream);
+        font-size: 15px;
+        margin: 0;
     }
-  }
+
+    /* Dealer CTA */
+    .dealer-cta {
+        background: var(--cream);
+        border-radius: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 32px;
+        text-align: center;
+        margin-top: 24px;
+    }
+
+    .dealer-cta h3 {
+        margin: 0 0 8px;
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .dealer-cta p {
+        margin: 0 0 19px;
+        color: #444;
+    }
+
+    .dealer-cta a.btn {
+        display: inline-block;
+        background: var(--yellow);
+        color: var(--black);
+        text-decoration: none;
+        font-weight: 700;
+        padding: 13px 29px;
+        border-radius: 0;
+    }
+
+    .dealer-cta a.btn:hover {
+        background: #e6b900;
+    }
+
+    /* Placeholder sections (news + testimonials, to be designed later) */
+    .placeholder {
+        background: #fff;
+        border: 1px dashed #ccc;
+        border-radius: 0;
+        padding: 32px;
+        text-align: center;
+        color: #999;
+        margin-top: 24px;
+        font-size: 14px;
+    }
+
+    .page-footer-space {
+        height: 48px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 749px) {
+        .wrap {
+        padding: 0 20px;
+        }
+
+        .two-col {
+        grid-template-columns: 1fr;
+        }
+
+        .intro {
+        padding: 20px 24px;
+        }
+
+        .intro h2 {
+        font-size: 21px;
+        }
+
+        .card {
+        padding: 20px;
+        }
+
+        .trust-banner {
+        padding: 28px 20px;
+        }
+
+        .trust-banner .main-line {
+        font-size: 18px;
+        }
+
+        .dealer-cta {
+        padding: 24px;
+        }
+    }
 </style>
 </head>
 <body>
