@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact Us — Brüder Kompressor (Prototype)</title>
+        <style>
+            :root {
+                --yellow: #ffcd03;
+                --black: #000000;
+                --cream: #ede8df;
+            }
+
+            @font-face {
+                font-family: 'Zuume Edge Black';
+                src: url('{{ "ZuumeEdge-Black.ttf" | asset_url }}') format('truetype');
+                font-weight: 900;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: 'Zuume Edge Black';
+                src: url('{{ "ZuumeEdge-BlackItalic.ttf" | asset_url }}') format('truetype');
+                font-weight: 900;
+                font-style: italic;
+                font-display: swap;
+            }
+
+            * { box-sizing: border-box; }
+
+            body {
+                margin: 0;
+                color: var(--black);
+                line-height: 1.5;
+            }
+
+            .wrap {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 32px;
+                margin-bottom: 70px;
+            }
+
+            .hero {
+                padding: 48px 32px;
+                text-align: center;
+            }
+
+            .intro h1 {
+                margin: 0;
+                font-size: clamp(32px, 5vw, 48px);
+                font-family: 'Zuume Edge Black', sans-serif;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .intro {
+                background: #fff;
+                border-radius: 0;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                padding: 24px 32px;
+                margin: 32px auto 0;
+            }
+
+            .intro h2 {
+                margin: 0 0 6px;
+                font-size: 26px;
+                font-family: 'Zuume Edge Black', sans-serif;
+                font-weight: 800;
+            }
+
+            .intro p {
+                margin: 0;
+                color: #444;
+                font-size: 16px;
+            }
+
+            .two-col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-top: 24px;
+            }
+
+            .card {
+                background: #fff;
+                border-radius: 0;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                padding: 28px;
+            }
+
+            .info-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .info-list li {
+                display: flex;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .info-icon {
+                flex-shrink: 0;
+                width: 26px;
+                height: 26px;
+                margin-top: 2px;
+            }
+
+            .info-label {
+                font-size: 13px;
+                color: #777;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+                margin: 0 0 2px;
+            }
+
+            .info-value {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .info-value a {
+                color: var(--black);
+                text-decoration: none;
+            }
+
+            .info-value a:hover {
+                text-decoration: underline;
+            }
+
+            /* Form */
+            .form-field {
+                margin-bottom: 18px;
+            }
+
+            .form-field label {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 6px;
+            }
+
+            .form-field input,
+            .form-field textarea {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid #d1d1d1;
+                border-radius: 0;
+                font-size: 15px;
+                font-family: inherit;
+            }
+
+            .form-field textarea {
+                min-height: 110px;
+                resize: vertical;
+            }
+
+            .form-field input:focus,
+            .form-field textarea:focus {
+                outline: 2px solid var(--black);
+                outline-offset: 1px;
+            }
+
+            /* Paired fields: email+phone, company+postcode — side by side on desktop, stacked on mobile */
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+
+            .form-row .form-field {
+                margin-bottom: 0;
+            }
+
+            .form-row + .form-field,
+            .form-row + .form-row {
+                margin-top: 18px;
+            }
+
+            .submit-btn {
+                background: var(--yellow);
+                color: var(--black);
+                border: none;
+                border-radius: 0;
+                padding: 14px 29px;
+                font-size: 15px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+            .submit-btn:hover {
+                background: #e6b900;
+            }
+
+            .form-success {
+                background: #eaf7ec;
+                border: 1px solid #bfe3c5;
+                color: #1e6b2e;
+                padding: 14px 16px;
+                margin-bottom: 18px;
+                font-size: 14px;
+            }
+
+            .form-errors {
+                background: #fdecea;
+                border: 1px solid #f3c2bd;
+                color: #a3241a;
+                padding: 14px 16px;
+                margin-bottom: 18px;
+                font-size: 14px;
+            }
+
+            .form-errors ul {
+                margin: 6px 0 0;
+                padding-left: 18px;
+            }
+
+            /* Support lists */
+            .support-list h3 {
+                margin: 0 0 16px;
+                font-size: 18px;
+                font-weight: 800;
+            }
+
+            .support-list ul {
+                margin: 0;
+                padding-left: 19px;
+            }
+
+            .support-list li {
+                margin-bottom: 10px;
+                font-size: 15px;
+                color: #333;
+            }
+
+            /* Trust banner */
+            .trust-banner {
+                background: var(--black);
+                border-radius: 0;
+                padding: 36px 32px;
+                text-align: center;
+                margin-top: 24px;
+            }
+
+            .trust-banner .main-line {
+                color: var(--yellow);
+                font-size: 21px;
+                font-weight: 800;
+                line-height: 1.4;
+                margin: 0 0 10px;
+                max-width: 640px;
+                margin-inline: auto;
+            }
+
+            .trust-banner .sub-line {
+                color: var(--cream);
+                font-size: 15px;
+                margin: 0;
+            }
+
+            /* Dealer CTA */
+            .dealer-cta {
+                background: var(--cream);
+                border-radius: 0;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                padding: 32px;
+                text-align: center;
+                margin-top: 24px;
+            }
+
+            .dealer-cta h3 {
+                margin: 0 0 8px;
+                font-size: 21px;
+                font-weight: 800;
+            }
+
+            .dealer-cta p {
+                margin: 0 0 19px;
+                color: #444;
+            }
+
+            .dealer-cta a.btn {
+                display: inline-block;
+                background: var(--yellow);
+                color: var(--black);
+                text-decoration: none;
+                font-weight: 700;
+                padding: 13px 29px;
+                border-radius: 0;
+            }
+
+            .dealer-cta a.btn:hover {
+                background: #e6b900;
+            }
+
+            .placeholder {
+                background: #fff;
+                border: 1px dashed #ccc;
+                border-radius: 0;
+                padding: 32px;
+                text-align: center;
+                color: #999;
+                margin-top: 24px;
+                font-size: 14px;
+            }
+
+            .page-footer-space {
+                height: 48px;
+            }
+
+            /* Mobile responsive */
+            @media (max-width: 749px) {
+                .wrap {
+                    padding: 0 20px;
+                }
+
+                .two-col {
+                    grid-template-columns: 1fr;
+                }
+
+                .form-row {
+                    grid-template-columns: 1fr;
+                    gap: 0;
+                }
+
+                .form-row .form-field {
+                    margin-bottom: 18px;
+                }
+
+                .form-row .form-field:last-child {
+                    margin-bottom: 0;
+                }
+
+                .intro {
+                    padding: 20px 24px;
+                }
+
+                .intro h2 {
+                    font-size: 21px;
+                }
+
+                .card {
+                    padding: 20px;
+                }
+
+                .trust-banner {
+                    padding: 28px 20px;
+                }
+
+                .trust-banner .main-line {
+                    font-size: 18px;
+                }
+
+                .dealer-cta {
+                    padding: 24px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <main class="wrap">
+
+            <section class="intro">
+                <h1 style="text-align: center; padding-bottom: 20px;">Contact us</h1>
+                <h2>Speak to the right people</h2>
+                <p>Whether you're chasing pricing, technical advice, dealer support, or parts — we'll point you in the right direction quickly.</p>
+            </section>
+
+            <section class="two-col">
+                <div class="card">
+                    <ul class="info-list">
+                        <li>
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <div>
+                                <p class="info-label">Phone</p>
+                                <p class="info-value"><a href="tel:1300088990">1300 088 990</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                            <div>
+                                <p class="info-label">Email</p>
+                                <p class="info-value"><a href="mailto:info@bruderaustralia.com.au">info@bruderaustralia.com.au</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <div>
+                                <p class="info-label">Head office</p>
+                                <p class="info-value">32 Secker Road, Mount Barker, South Australia 5251</p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            <div>
+                                <p class="info-label">Operating hours</p>
+                                <p class="info-value">Monday to Friday, 7:00AM to 5:00PM (not including public holidays)</p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6M9 11h6M9 19h4"/></svg>
+                            <div>
+                                <p class="info-label">ABN</p>
+                                <p class="info-value">17 662 786 441</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    {%- form 'contact', id: 'ContactForm' -%}
+
+                        {%- if form.posted_successfully? -%}
+                            <div class="form-success">
+                                Thanks — your message has been sent. We'll be in touch shortly.
+                            </div>
+                        {%- endif -%}
+
+                        {%- if form.errors -%}
+                            <div class="form-errors">
+                                Please check the following:
+                                <ul>
+                                    {%- for field in form.errors -%}
+                                        <li>
+                                            {%- if field == 'form' -%}
+                                                {{ form.errors.messages[field] }}
+                                            {%- else -%}
+                                                {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                                            {%- endif -%}
+                                        </li>
+                                    {%- endfor -%}
+                                </ul>
+                            </div>
+                        {%- endif -%}
+
+                        <div class="form-field">
+                            <label for="ContactFormName">Name</label>
+                            <input type="text" id="ContactFormName" name="contact[name]" placeholder="Name" value="{{ form.name }}" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="ContactFormEmail">Email</label>
+                                <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="Email" value="{{ form.email }}" autocomplete="email" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="ContactFormPhone">Phone number</label>
+                                <input type="tel" id="ContactFormPhone" name="contact[phone]" placeholder="Your phone number" value="{{ form.phone }}" autocomplete="tel">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="ContactFormCompany">Company (optional)</label>
+                                <input type="text" id="ContactFormCompany" name="contact[Company]" placeholder="Company">
+                            </div>
+                            <div class="form-field">
+                                <label for="ContactFormPostcode">Postcode (optional)</label>
+                                <input type="text" id="ContactFormPostcode" name="contact[Postcode]" placeholder="Postcode">
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="ContactFormMessage">Message</label>
+                            <textarea id="ContactFormMessage" name="contact[body]" placeholder="Message" required>{{ form.body }}</textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Submit</button>
+
+                    {%- endform -%}
+                </div>
+            </section>
+
+            <section class="two-col">
+                <div class="card support-list">
+                    <h3>What happens next?</h3>
+                    <ul>
+                        <li>We review your enquiry within business hours</li>
+                        <li>The right person responds — not a call centre</li>
+                        <li>If needed, we'll connect you with your nearest dealer</li>
+                    </ul>
+                </div>
+
+                <div class="card support-list">
+                    <h3>When to contact us directly</h3>
+                    <ul>
+                        <li>You're comparing compressor options</li>
+                        <li>You need help specifying equipment</li>
+                        <li>You're a hire company or mining operation</li>
+                        <li>You want to discuss custom requirements</li>
+                        <li>You're looking to become a dealer</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="trust-banner">
+                <p class="main-line">We are Trusted by Farmers, Hire Companies and Mining Operations across Australia.</p>
+                <p class="sub-line">We build equipment for people who depend on it. The same applies to our support.</p>
+            </section>
+
+            <section class="dealer-cta">
+                <h3>Looking for a local dealer?</h3>
+                <p>Find the nearest authorised Brüder dealer here.</p>
+                <a href="/pages/dealer-locations" class="btn">Find a dealer</a>
+            </section>
+
+            <div class="page-footer-space"></div>
+        </main>
+
+    </body>
+</html>
